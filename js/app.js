@@ -34,14 +34,55 @@ window.onclick = function(event) {
 //_________________________
 
 //Variables
+const empContainer = document.getElementById("employees")
 let employees = [];
 const urlAPI = `https://randomuser.me/api/?results=12&inc=name,picture,email,location,phone,dob&noinfo&nat=US`;
 
+// Fetch API
 fetch(urlAPI)
     .then(response => response.json())
-    .then(response => console.log(response))
-    .then(response => console.log(response[0].))
-    .catch(err => console.log(err))
+    .then(response => response.results)
+    .then(response => {console.log(response); return response;})
+    .then(displayEmployees)
+    
+    .catch(err => console.log('Looks like there was an error', err));
+
+
+
+// Display 12 random employees with picture
+function displayEmployees(employeeData) {
+
+    employees = employeeData;
+
+    // store employee Html
+    let employeeHtml = "";
+    
+    //loop through each employee and create html
+    employees.forEach((employee, index) => {
+
+        let name = employee.name;
+        let email = employee.email;
+        let city = employee.location.city;
+        let picture = employee.picture;
+
+        // template literal
+        employeeHtml += `
+        <div class="employee-tile" data-index="${index}">
+              <div class="info-wrapper">
+                <img src="${picture.medium}" alt="portrait" />
+                <div class="employees-text">
+                  <h2>${name.first} ${name.last}</h2>
+                  <span>${email}</span>
+                  <span>${city}</span>
+                </div>
+              </div>
+            </div>
+        `;
+         
+    });
+
+    empContainer.innerHTML = employeeHtml;
+}
 
 
 
