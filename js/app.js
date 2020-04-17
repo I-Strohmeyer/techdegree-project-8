@@ -1,6 +1,11 @@
-// MODAL SETUP
-//___________________________
 
+// API FETCH SETUP
+//_________________________
+
+//Variables
+
+let employees = [];
+const urlAPI = `https://randomuser.me/api/?results=12&inc=name,picture,email,location,phone,dob&noinfo&nat=US`;
 // Get the modal
 const modal = document.getElementById("employee-info-modal");
 
@@ -10,33 +15,9 @@ const tiles = document.getElementsByClassName("employee-tile")[0];
 // Get the <span> element that closes the modal
 const closeButton = document.getElementsByClassName("close")[0];
 
+//employee container
+const empContainer = document.getElementById("employees");
 
-
-// When the user clicks the button, check for other input field filled out
-tiles.onclick = function() {
-    modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-closeButton.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-    }
-}
-
-
-// API FETCH SETUP
-//_________________________
-
-//Variables
-const empContainer = document.getElementById("employees")
-let employees = [];
-const urlAPI = `https://randomuser.me/api/?results=12&inc=name,picture,email,location,phone,dob&noinfo&nat=US`;
 
 // Fetch API
 fetch(urlAPI)
@@ -67,7 +48,7 @@ function displayEmployees(employeeData) {
 
         // template literal
         employeeHtml += `
-        <div class="employee-tile" data-index="${index}">
+        <div class="employee-tile card" data-index="${index}">
               <div class="info-wrapper">
                 <img src="${picture.medium}" alt="portrait" />
                 <div class="employees-text">
@@ -82,8 +63,59 @@ function displayEmployees(employeeData) {
     });
 
     empContainer.innerHTML = employeeHtml;
+};
+
+function displayModal(index) {
+
+  //use object destructuring to make template literal cleaner
+  let { name, dob, phone, email, location: { city, street, state, country, postcode}, picture} = employees[index];
+  
+  let date = new Date(dob.date);
+
+  const modalHtml = `
+  <div class="modal-content">
+        <span class="close">&times;</span>
+        <img src="${picture.large}" alt="profile-pic" />
+        <h2>${name.first} ${name.last}</h2>
+        <p>${email}</p>
+        <p>${city}</p>
+        <hr>
+        <p>${phone}</p>
+        <p>${street.number} ${street.name}, ${state} ${postcode}</p>
+        <p>Birthday: ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}</p>
+      </div>
+  `;
+  modal.style.display = "block";
+  modal.innerHTML = modalHtml;
+
+
 }
 
+// MODAL SETUP & Event
+//___________________________
 
+
+empContainer.addEventListener('click', event => {
+  if (event.target !== empContainer) {
+
+    // select the card element based on its proximity to actual element clicked
+    const card = event.target.closest(".card");
+    const index = card.getAttribute('data-index');
+
+    displayModal(index);
+  }
+});
+
+// When the user clicks on <span> (x), close the modal
+closeButton.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+    }
+}
 
 
