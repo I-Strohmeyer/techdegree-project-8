@@ -13,7 +13,7 @@ const modal = document.getElementById("employee-info-modal");
 const tiles = document.getElementsByClassName("employee-tile")[0];
 
 // Get the <span> element that closes the modal
-const closeButton = document.getElementsByClassName("close")[0];
+const closeButton = document.querySelector(".close");
 
 //employee container
 const empContainer = document.getElementById("employees");
@@ -106,16 +106,16 @@ empContainer.addEventListener('click', event => {
   }
 });
 
-// When the user clicks on <span> (x), close the modal
-closeButton.onclick = function() {
+// When the user clicks on (x), close the modal
+closeButton.addEventListener('click', event => {
   modal.style.display = "none";
-}
+});
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
     }
-}
+};
 
 
