@@ -4,6 +4,8 @@
 
 //Variables
 
+let closeButton;
+
 let employees = [];
 const urlAPI = `https://randomuser.me/api/?results=12&inc=name,picture,email,location,phone,dob&noinfo&nat=US`;
 // Get the modal
@@ -11,9 +13,6 @@ const modal = document.getElementById("employee-info-modal");
 
 // Get the tiles that opens the modal
 const tiles = document.getElementsByClassName("employee-tile")[0];
-
-// Get the <span> element that closes the modal
-const closeButton = document.querySelector(".close");
 
 //employee container
 const empContainer = document.getElementById("employees");
@@ -74,7 +73,7 @@ function displayModal(index) {
 
   const modalHtml = `
   <div class="modal-content">
-        <span class="close">&times;</span>
+        <span id="close">&times;</span>
         <img src="${picture.large}" alt="profile-pic" />
         <h2>${name.first} ${name.last}</h2>
         <p>${email}</p>
@@ -88,11 +87,17 @@ function displayModal(index) {
   modal.style.display = "block";
   modal.innerHTML = modalHtml;
 
+  closeButton = document.getElementById("close");
 
+// When the user clicks on (x), close the modal
+  closeButton.addEventListener('click', () => {
+  modal.style.display = "none";
+});
 }
 
 // MODAL SETUP & Event
 //___________________________
+
 
 
 empContainer.addEventListener('click', event => {
@@ -106,10 +111,13 @@ empContainer.addEventListener('click', event => {
   }
 });
 
+/* Get the <span> element that closes the modal
+//const closeButton = document.getElementById("close");
+
 // When the user clicks on (x), close the modal
-closeButton.addEventListener('click', event => {
+//closeButton.addEventListener('click', () => {
   modal.style.display = "none";
-});
+});*/
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
