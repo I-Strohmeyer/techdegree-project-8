@@ -4,12 +4,13 @@
 
 //Variables
 
-let closeButton;
-
 let employees = [];
 const urlAPI = `https://randomuser.me/api/?results=12&inc=name,picture,email,location,phone,dob&noinfo&nat=US`;
 // Get the modal
 const modal = document.getElementById("employee-info-modal");
+const modalDetails = document.getElementById("employee-details");
+const closeButton = document.getElementById("close");
+
 
 // Get the tiles that opens the modal
 const tiles = document.getElementsByClassName("employee-tile")[0];
@@ -64,6 +65,8 @@ function displayEmployees(employeeData) {
     empContainer.innerHTML = employeeHtml;
 };
 
+
+
 function displayModal(index) {
 
   //use object destructuring to make template literal cleaner
@@ -72,33 +75,26 @@ function displayModal(index) {
   let date = new Date(dob.date);
 
   const modalHtml = `
-  <div class="modal-content">
-        <span id="close">&times;</span>
         <img src="${picture.large}" alt="profile-pic" />
-        <h2>${name.first} ${name.last}</h2>
+        <h2 class="modal-name">${name.first} ${name.last}</h2>
         <p>${email}</p>
         <p>${city}</p>
         <hr>
         <p>${phone}</p>
         <p>${street.number} ${street.name}, ${state} ${postcode}</p>
-        <p>Birthday: ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}</p>
-      </div>
+        <p>Birthday: ${date.getMonth()} / ${date.getDate()} / ${date.getFullYear()}</p>
   `;
   modal.style.display = "block";
-  modal.innerHTML = modalHtml;
-
-  closeButton = document.getElementById("close");
-
-// When the user clicks on (x), close the modal
-  closeButton.addEventListener('click', () => {
-  modal.style.display = "none";
-});
+  modalDetails.innerHTML = modalHtml;
 }
 
 // MODAL SETUP & Event
 //___________________________
 
-
+// When the user clicks on (x), close the modal
+  closeButton.addEventListener('click', () => {
+  modal.style.display = "none";
+});
 
 empContainer.addEventListener('click', event => {
   if (event.target !== empContainer) {
@@ -125,5 +121,16 @@ window.onclick = function(event) {
     modal.style.display = "none";
     }
 };
+
+modal.addEventListener('click', event => {
+  const previous = document.getElementById('previous');
+  if (event.target.tagName === 'BUTTON')
+  
+    if (event.target === previous)
+      alert("I'm the left button")
+    else {
+      alert("I'm the right button")
+    }  
+});
 
 
