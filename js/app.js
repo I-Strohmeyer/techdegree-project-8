@@ -18,33 +18,33 @@ const empContainer = document.getElementById("employees");
 
 // Fetch API
 fetch(urlAPI)
-    .then(response => response.json())
-    .then(response => response.results)
-    .then(response => {console.log(response); return response;})
-    .then(displayEmployees)
-    
-    .catch(err => console.log('Looks like there was an error', err));
+  .then(response => response.json())
+  .then(response => response.results)
+  .then(response => { console.log(response); return response; })
+  .then(displayEmployees)
+
+  .catch(err => console.log('Looks like there was an error', err));
 
 
 
 // Display 12 random employees with picture
 function displayEmployees(employeeData) {
 
-    employees = employeeData;
+  employees = employeeData;
 
-    // store employee Html
-    let employeeHtml = "";
-    
-    //loop through each employee and create html
-    employees.forEach((employee, index) => {
+  // store employee Html
+  let employeeHtml = "";
 
-        let name = employee.name;
-        let email = employee.email;
-        let city = employee.location.city;
-        let picture = employee.picture;
+  //loop through each employee and create html
+  employees.forEach((employee, index) => {
 
-        // template literal
-        employeeHtml += `
+    let name = employee.name;
+    let email = employee.email;
+    let city = employee.location.city;
+    let picture = employee.picture;
+
+    // template literal
+    employeeHtml += `
         <div class="employee-tile card" data-index="${index}">
               <div class="info-wrapper">
                 <img src="${picture.medium}" alt="portrait" />
@@ -56,17 +56,17 @@ function displayEmployees(employeeData) {
               </div>
             </div>
         `;
-         
-    });
 
-    empContainer.innerHTML = employeeHtml;
+  });
+
+  empContainer.innerHTML = employeeHtml;
 };
 
 // MODAL SETUP & Event
 //___________________________
 
 // When the user clicks on (x), close the modal
-  closeButton.addEventListener('click', () => {
+closeButton.addEventListener('click', () => {
   modal.style.display = "none";
 });
 
@@ -82,12 +82,13 @@ empContainer.addEventListener('click', event => {
 });
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
-    }
+  }
 };
 
+// shows modalcontent when pevious/next button is clicked
 modal.addEventListener('click', event => {
   const previous = document.getElementById('previous');
   if (event.target.tagName === 'BUTTON') {
@@ -119,10 +120,11 @@ function setModalContent(index) {
   currentModalIndex = parseInt(index, 10);
 
   //use object destructuring to make template literal cleaner
-  let { name, dob, phone, email, location: { city, street, state, country, postcode}, picture} = employees[index];
-  
+  let { name, dob, phone, email, location: { city, street, state, country, postcode }, picture } = employees[index];
+
   let date = new Date(dob.date);
 
+  //modal html
   const modalHtml = `
         <img src="${picture.large}" alt="profile-pic" />
         <h2 class="modal-name">${name.first} ${name.last}</h2>
@@ -133,7 +135,7 @@ function setModalContent(index) {
         <p>${street.number} ${street.name}, ${state} ${postcode}</p>
         <p>Birthday: ${date.getMonth()} / ${date.getDate()} / ${date.getFullYear()}</p>
   `;
-  
+
   modalDetails.innerHTML = modalHtml;
 }
 
@@ -142,9 +144,10 @@ function displayModal(index) {
   modal.style.display = "block";
 }
 
-// SEARCH FUNCTION
+// SHOWING THE MODAL
+//___________________________
 
-function searchEmployees() {
+/*function searchEmployees() {
   //variables
   let input = document.getElementById('search');
   let searchCriteria = input.value.toLowerCase();
@@ -164,4 +167,26 @@ function searchEmployees() {
     }
   }
 
-  };
+};*/
+
+function searchEmployees() {
+  //variables
+  let input = document.getElementById('search');
+  let searchCriteria = input.value.toLowerCase();
+  let tiles = document.getElementsByClassName("employee-tile");
+
+  //loop through employees
+  let nameValue, firstName, lastName;
+  for (let i = 0; i < employees.length; i++) {
+    nameValue = employees[i].name;
+    firstName = nameValue.first.toString().toLowerCase();
+    lastName = nameValue.last.toString().toLowerCase();
+
+    if (firstName.indexOf(searchCriteria) == 0 || lastName.indexOf(searchCriteria) == 0) {
+      tiles[i].style.display = "block";
+    } else {
+      tiles[i].style.display = "none";
+    }
+  }
+
+};
